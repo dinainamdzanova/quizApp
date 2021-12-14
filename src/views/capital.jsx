@@ -8,10 +8,8 @@ import { getQuiz } from "../store/quizSlice";
 const Capital = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
-  const [ index, setIndex ] = useState(0);
-  const [ randomAnswer, setRandomAnswer] = useState(['tekst', 'tekst', 'tekst', 'tekst'])
-  const [ getAnswer, setGetAnswer ] = useState("")
-  const [ correctAnswer, setCorrectAnswer ] = useState("")
+  const [index, setIndex] = useState(0);
+  const [randomAnswer, setRandomAnswer] = useState([]);
 
   useEffect(() => {
     dispatch(getQuiz());
@@ -23,53 +21,57 @@ const Capital = () => {
   }
 
   useEffect(() => {
-    setIndex(index + randomInteger(0, 250))
-  }, [])
-
-  // useEffect(() => {
-  //   const ans = state.quizzes[randomInteger(0, 250)]?.capital[0]
-  //   setGetAnswer(ans) 
-  //   console.log(getAnswer)
-  // }, [])
+    setIndex(index + randomInteger(0, 250));
+  }, []);
 
   useEffect(() => {
-    // const ans = state.quizzes[randomInteger(0, 250)].capital[0]
-    setGetAnswer(state.quizzes[randomInteger(0, 250)].capital[0]) 
-    console.log(getAnswer)
-    setCorrectAnswer(state.quizzes[index].capital[0])
-
-    setRandomAnswer(randomAnswer.splice(randomInteger(0, 3), 0, getAnswer, correctAnswer))
-    console.log(randomAnswer)
-  }, [])
+    if (state.status === "fulfilled") {
+      let array = [];
+      array.splice(
+        randomInteger(0, 3),
+        0,
+        state.quizzes[randomInteger(0, 250)]?.capital[0]
+      );
+      array.splice(
+        randomInteger(0, 3),
+        0,
+        state.quizzes[randomInteger(0, 250)]?.capital[0]
+      );
+      array.splice(
+        randomInteger(0, 3),
+        0,
+        state.quizzes[randomInteger(0, 250)]?.capital[0]
+      );
+      array.splice(randomInteger(0, 3), 0, state.quizzes[index]?.capital[0]);
+      setRandomAnswer(array);
+    }
+  }, [state.status]);
 
   return (
     <>
-    
       {state.status === "fulfilled" ? (
         <>
-        
           <Text weight="bold" size="24" color="#2F527B">
-            {state.quizzes[index].name?.common} is the capital of
+            The capital of {state.quizzes[index]?.name?.common} is...
           </Text>
           <Space y="30" />
           <>
             <Button>
-              A <Space x="20" />{console.log(state.quizzes) }
+              A <Space x="20" /> {randomAnswer[0]}
             </Button>
             <Space y="15" />
             <Button>
-              B <Space x="20" /> {randomAnswer[randomInteger(0, 6)]}
+              B <Space x="20" /> {randomAnswer[1]}
             </Button>
             <Space y="15" />
             <Button>
-              C <Space x="20" /> {state.quizzes[randomInteger(0, 250)].capital[0]}
+              C <Space x="20" /> {randomAnswer[2]}
             </Button>
             <Space y="15" />
             <Button>
-              D <Space x="20" /> {randomAnswer}
+              D <Space x="20" /> {randomAnswer[3]}
             </Button>
           </>
-
         </>
       ) : null}
     </>
@@ -77,5 +79,3 @@ const Capital = () => {
 };
 
 export default Capital;
-
-// state.quizzes[index].capital[0]
