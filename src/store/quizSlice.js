@@ -23,9 +23,6 @@ const quizSlice = createSlice({
             state.quizzes = action.payload;
             state.status = "fulfilled"
         },
-        [getQuiz.rejected]: (state) => {
-            state.status = "ishkal"
-        }
     }
 })
 
